@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import styled from 'styled-components';
 
+import Skeleton from 'components/molecules/Skeleton/Skeleton';
+
 const getUsers = gql`
   {
     users(options: { paginate: { limit: 8 } }) {
@@ -11,11 +13,6 @@ const getUsers = gql`
         email
         phone
         website
-        address {
-          city
-          street
-          zipcode
-        }
         company {
           name
           catchPhrase
@@ -27,7 +24,8 @@ const getUsers = gql`
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
   padding: 50px;
   gap: 30px;
 `;
@@ -38,6 +36,14 @@ const Card = styled.div`
   flex-direction: column;
   border: 2px solid ${({ theme }) => theme.black};
   padding: 10px;
+
+  ${({ theme }) => theme.mq.tablet} {
+    width: 45%;
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    width: 23%;
+  }
 `;
 
 const Paragraph = styled.p`
@@ -77,6 +83,11 @@ const Home = () => {
 
   return (
     <Wrapper>
+      <h1 style={{ width: '100%' }}>React Developer Recruitment Task</h1>
+      <p style={{ width: '100%' }}>
+        App with posts of users with ability to manage posts and comments.
+      </p>
+      {loading && <Skeleton />}
       {users.map(({ id, name, email, phone, website, company }) => (
         <Card key={id}>
           <Paragraph isBold>{name}</Paragraph>
